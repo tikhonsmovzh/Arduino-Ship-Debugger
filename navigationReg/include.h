@@ -10,5 +10,6 @@
 #include "motor.h"
 #include "leg.h"
 #include "point.h"
+#include "circle.h"
 #include "DynamicStructure.h"
 #include "router.h"

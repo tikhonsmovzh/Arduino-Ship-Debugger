@@ -5,7 +5,7 @@ class DynamicStructure
   public:
     leg* Dequeue()
     {
-      point *saveFirst = first;
+      leg *saveFirst = first;
 
       if (first != NULL)
       {

@@ -1,6 +1,8 @@
 class point : public leg
 {
     int x = 0, y = 0;
+    long distance;
+    const long maxDistances = 20;
 
   public:
     point(int x = 0, int y = 0)
@@ -13,11 +15,18 @@ class point : public leg
 
     int GetY(){return y;}
 
-    long GetDistance(Navigation *navigation)
+    long GetDistance(){return distance;}
+
+    bool isComplite()
+    {
+      return distance < maxDistances;
+    }
+
+    void Update(Navigation *navigation)
     {
       long legX = navigation->GetX() - x;
       long legY = navigation->GetY() - y;
 
-      return sqrt(legX * legX + legY * legY);
+      distance = sqrt(legX * legX + legY * legY);
     }
 };

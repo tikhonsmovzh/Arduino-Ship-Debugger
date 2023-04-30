@@ -7,8 +7,6 @@ class router
 
     leg *current;
 
-    const long maxDistances = 20;
-
     const long loverDistance = 200;
 
     Navigation *navigation;
@@ -83,10 +81,8 @@ class router
       }
 
       current->Update(navigation);
-
-      long distance = current->GetDistance(navigation);
       
-      if (distance < maxDistances)
+      if (current->isComplite())
       {
         current = route.Dequeue();
 
@@ -104,9 +100,9 @@ class router
         motor.SetSpeed(StartSpeed);
       }
 
-      if (distance < loverDistance && isAccurate && current->GetAccurate())
+      if (current->GetDistance() < loverDistance && isAccurate && current->GetAccurate())
       {
-        int speeds = StartSpeed * (float)distance / (float)loverDistance;
+        int speeds = StartSpeed * (float)current->GetDistance() / (float)loverDistance;
 
         if (speeds > minSpeed)
           motor.SetAccurateSpeed(speeds);
