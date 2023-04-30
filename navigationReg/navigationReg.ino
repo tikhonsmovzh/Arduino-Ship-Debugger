@@ -1,12 +1,4 @@
-#include <Wire.h>
-#include <EEPROM.h>
-#include <Servo.h>
-#include "point.h"
-#include "publicMethods.h"
-#include "sector.h"
-#include "navigation.h"
-#include "DynamicStructure.h"
-#include "router.h"
+#include "include.h"
 
 const byte SensorP = 198;
 const byte ZeroingCompassP = 1;

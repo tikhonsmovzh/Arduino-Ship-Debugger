@@ -1,0 +1,14 @@
+#include <Wire.h>
+#include <EEPROM.h>
+#include <Servo.h>
+#include <TFLI2C.h>
+#include <I2Cdev.h>
+#include <MPU6050.h>
+#include "publicMethods.h"
+#include "sector.h"
+#include "navigation.h"
+#include "motor.h"
+#include "leg.h"
+#include "point.h"
+#include "DynamicStructure.h"
+#include "router.h"

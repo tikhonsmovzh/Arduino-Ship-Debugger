@@ -1,25 +1,23 @@
-class point
+class point : public leg
 {
     int x = 0, y = 0;
 
   public:
-    point *Next;
-
     point(int x = 0, int y = 0)
     {
       this->y = y;
       this->x = x;
-
-      Next = NULL;
     }
 
-    int GetX()
-    {
-      return x;
-    }
+    int GetX(){return x;}
 
-    int GetY()
+    int GetY(){return y;}
+
+    long GetDistance(Navigation *navigation)
     {
-      return y;
+      long legX = navigation->GetX() - x;
+      long legY = navigation->GetY() - y;
+
+      return sqrt(legX * legX + legY * legY);
     }
 };

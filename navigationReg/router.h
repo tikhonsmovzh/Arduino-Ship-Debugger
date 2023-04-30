@@ -1,5 +1,3 @@
-#include "motor.h"
-
 class router
 {
     const float lineCoef = 3;
@@ -7,7 +5,7 @@ class router
 
     DynamicStructure route;
 
-    point *current;
+    leg *current;
 
     const long maxDistances = 20;
 
@@ -26,13 +24,8 @@ class router
 
     void SetRotate(int deegre)
     {
-      int rot = deegre * lineCoef + sumError * integrateCoef;
-
-      motor.RearRotate(rot);
-      motor.ForvardRotate(-rot);
-
-      if (abs(rot) < 90)
-        sumError += deegre;
+      motor.RearRotate(deegre);
+      motor.ForvardRotate(-deegre);
     }
 
   public:
@@ -89,11 +82,10 @@ class router
         return;
       }
 
-      long legX = navigation->GetX() - current->GetX();
-      long legY = navigation->GetY() - current->GetY();
+      current->Update(navigation);
 
-      long distance = sqrt(legX * legX + legY * legY);
-
+      long distance = current->GetDistance(navigation);
+      
       if (distance < maxDistances)
       {
         current = route.Dequeue();
@@ -112,7 +104,7 @@ class router
         motor.SetSpeed(StartSpeed);
       }
 
-      if (distance < loverDistance && isAccurate)
+      if (distance < loverDistance && isAccurate && current->GetAccurate())
       {
         int speeds = StartSpeed * (float)distance / (float)loverDistance;
 
@@ -121,10 +113,14 @@ class router
       }
 
       int deegre = navigation->GetErorr(-(atan2(navigation->GetY() - current->GetY(), navigation->GetX() - current->GetX()) * 180 / PI) - 90);
+      int rot = deegre * lineCoef + sumError * integrateCoef;
 
       if (motor.GetSpeed() >= 0)
-        SetRotate(deegre);
+        SetRotate(rot);
       else
-        SetRotate(-deegre);
+        SetRotate(-rot);
+
+      if (abs(rot) < 90)
+        sumError += deegre;
     }
 };

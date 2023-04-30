@@ -1,7 +1,3 @@
-#include <TFLI2C.h>
-#include <I2Cdev.h>
-#include <MPU6050.h>
-
 class Navigation
 {
     sector* deegres[4] {new sector0(0, yPlus, xPlus), new sector(90, xPlus, yMinus), new sector(180, yMinus, xMinus), new sector(270, xMinus, yPlus)};

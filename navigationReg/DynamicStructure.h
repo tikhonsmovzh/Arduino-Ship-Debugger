@@ -1,9 +1,9 @@
 class DynamicStructure
 {
-    point *first, *last;
+    leg *first, *last;
 
   public:
-    point* Dequeue()
+    leg* Dequeue()
     {
       point *saveFirst = first;
 
@@ -18,7 +18,7 @@ class DynamicStructure
       return saveFirst;
     }
 
-    void Enqueu(point *data)
+    void Enqueu(leg *data)
     {
       if (first == NULL)
       {
