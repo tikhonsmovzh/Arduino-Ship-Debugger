@@ -17,7 +17,7 @@ Navigation navigation;
 
 router Router(&navigation);
 
-bool previousKey;
+bool isEnable = false;
 
 void setup() {
   Serial.begin(9600);
@@ -28,8 +28,6 @@ void setup() {
 
   navigation.Init();
   Router.Init();
-
-  previousKey = digitalRead(4);
 }
 
 void loop() {
@@ -52,18 +50,15 @@ void loop() {
 
     bool nowKey = digitalRead(key);
 
-    if (nowKey)
+    if (isEnable)
       Router.Update();
+  }
 
-    if (nowKey != previousKey)
-    {
-      if (nowKey)
-        Router.Start();
-      else
-        Router.End();
-    }
+  if(digitalRead(key) && !isEnable)
+  {
+    isEnable = true;
 
-    previousKey = nowKey;
+    Router.Start();
   }
 
   if (Serial.available() > 0)

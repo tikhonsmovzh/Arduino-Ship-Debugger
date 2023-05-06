@@ -1,11 +1,11 @@
-class circle: public leg
+class circles: public leg
 {
     int x, y, radius, Start, End, alpha, rotation, potentialX, potentialY;
 
-    const int steps = 15;
+    const int steps = 20;
 
   public:
-    circle(int x, int y, int radius, int starts, int rot)
+    circles(int x, int y, int radius, int starts, int rot)
     {
       this->y = y;
       this->x = x;
@@ -21,11 +21,11 @@ class circle: public leg
 
     bool GetAccurate() {return false;}
 
-    bool isComplite(){return !(rotation > 0 ? alpha <= End : alpha >= Start);}
+    bool isComplite(){return !(rotation > 0 ? alpha <= End : alpha >= End);}
 
     void Update(Navigation *navigation)
     {
-      alpha = (atan2(navigation->GetY() - y, navigation->GetX() - x) * 180 / PI) + 180;
+      alpha = atan2(navigation->GetY() - y, navigation->GetX() - x) * 180 / PI;
 
       alpha += rotation > 0 ? steps : -steps;
 

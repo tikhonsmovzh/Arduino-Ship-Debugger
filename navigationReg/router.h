@@ -11,7 +11,7 @@ class router
 
     Navigation *navigation;
 
-    const byte StartSpeed = 140;
+    const byte StartSpeed = 100;
     const byte minSpeed = 80;
 
     bool isAccurate = false;
@@ -49,14 +49,30 @@ class router
 
       navigation->CompossGyro();
 
-      isAccurate = true;
-      route.Enqueu(new point(10, 250));
-      route.Enqueu(new point(135, 250));
-      route.Enqueu(new point(150, 35));
-      route.Enqueu(new point(10, 20));
-
+      // 1 задание
       //route.Enqueu(new point(85, 278));
       //route.Enqueu(new point(85, 0));
+
+      // 2 задание
+      //isAccurate = true;
+      //route.Enqueu(new point(10, 250));
+      //route.Enqueu(new point(135, 250));
+      //route.Enqueu(new point(150, 35));
+      //route.Enqueu(new point(10, 20));
+
+      // 3 задание
+      //route.Enqueu(new point(146, 162));
+      //route.Enqueu(new circles(79, 162, 66, 0, 180));
+      //route.Enqueu(new point(30, 5));
+
+      // 4 задание
+      //route.Enqueu(new point(146, 192));
+      //route.Enqueu(new circles(79, 192, 66, 0, 180));
+      //route.Enqueu(new point(146, 83));
+      //route.Enqueu(new circles(79, 83, 61, 0, -180));
+      //route.Enqueu(new point(146, 192));
+      //route.Enqueu(new circles(79, 192, 66, 0, 180));
+      //route.Enqueu(new point(30, 5));
 
       motor.SetSpeed(StartSpeed);
 

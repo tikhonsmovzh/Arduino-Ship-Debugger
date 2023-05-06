@@ -2,7 +2,7 @@ class Navigation
 {
     sector* deegres[4] {new sector0(0, yPlus, xPlus), new sector(90, xPlus, yMinus), new sector(180, yMinus, xMinus), new sector(270, xMinus, yPlus)};
 
-    int preferred, maxX, compass, minX, maxY, minY, centerX, centerY, x, y, h, l, gyro, gyroSpeed, distance1, distance2, pool = 0;
+    int preferred, maxX, compass, minX, maxY, minY, centerX, centerY, x, y, h, l, gyro, gyroSpeed, distance1, distance2, pool = 0, errorDist1 = 0, errorDist2 = 0;
 
     double rot = 0;
 
@@ -85,6 +85,9 @@ class Navigation
 
       EEPROM.get(SaveBaseData + 10, l);
       EEPROM.get(SaveBaseData + 12, h);
+
+      tflI2C.getData(distance1, Addr2);
+      tflI2C.getData(distance2, Addr1);
     }
 
     void SaveCompass()
@@ -109,6 +112,14 @@ class Navigation
     {
       tflI2C.getData(distance1, Addr2);
       tflI2C.getData(distance2, Addr1);
+
+      //int nowDist1, nowDist2;
+
+      //tflI2C.getData(nowDist1, Addr2);
+      //tflI2C.getData(nowDist2, Addr1);
+
+      //previosDist1 = distance1;
+      //previosDist2 = distance2;
 
       compass = GetValue();
 
