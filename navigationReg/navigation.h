@@ -2,9 +2,14 @@ class Navigation
 {
     sector* deegres[4] {new sector0(0, yPlus, xPlus), new sector(90, xPlus, yMinus), new sector(180, yMinus, xMinus), new sector(270, xMinus, yPlus)};
 
-    int preferred, maxX, compass, minX, maxY, minY, centerX, centerY, x, y, h, l, gyro, gyroSpeed, distance1, distance2, pool = 0;
+    int preferred, maxX, compass, minX, maxY, minY, centerX, centerY, x, y, h, l, gyro, gyroSpeed, distance1, distance2,
+        pool = 0, errorX = 0, errorY = 0, previosX = 0, previosY = 0;
+
+    unsigned long previosIgnoreTime = 0, currentTime = 0;
 
     double rot = 0;
+
+    bool isSeeBuoyX = false, isSeeBuoyY = false;
 
     unsigned long int timer = 0;
 
@@ -13,12 +18,14 @@ class Navigation
 
     const int addr = 0x1E;
 
-    const int  Addr1 = 0x11;
-    const int  Addr2 = TFL_DEF_ADR;
+    const int Addr1 = 0x11;
+    const int Addr2 = TFL_DEF_ADR;
 
     const int sensitivity = 50;
 
     const int GyroError = 379;
+
+    const int ignoreTime = 1;
 
     TFLI2C tflI2C;
 
@@ -88,6 +95,9 @@ class Navigation
 
       tflI2C.getData(distance1, Addr2);
       tflI2C.getData(distance2, Addr1);
+
+      previosX = deegres[preferred]->GetX(distance1, distance2, l, h);
+      previosY = deegres[preferred]->GetY(distance1, distance2, l, h);
     }
 
     void SaveCompass()
@@ -109,17 +119,63 @@ class Navigation
     }
 
     void UpdateDist()
-    {
+    { 
       tflI2C.getData(distance1, Addr2);
       tflI2C.getData(distance2, Addr1);
 
       compass = GetValue();
 
-      x = deegres[preferred]->GetX(distance1, distance2, l, h);
-      y = deegres[preferred]->GetY(distance1, distance2, l, h);
+      if (currentTime >= previosIgnoreTime)
+      {
+        x = deegres[preferred]->GetX(distance1, distance2, l, h);
+        y = deegres[preferred]->GetY(distance1, distance2, l, h);
+
+        if (isEnable)
+        {
+          int differenceX = previosX - x, differenceY = previosY - y;
+
+          if (abs(differenceX) > sensitivity)
+          {
+            if (isSeeBuoyX)
+            {
+              errorX = 0;
+              isSeeBuoyX = false;
+            }
+            else
+            {
+              errorX = differenceX;
+              isSeeBuoyX = true;
+            }
+          }
+
+          if (abs(differenceY) > sensitivity)
+          {
+            if (isSeeBuoyY)
+            {
+              errorY = 0;
+              isSeeBuoyY = false;
+            }
+            else
+            {
+              errorY = differenceY;
+              isSeeBuoyY = true;
+            }
+          }
+        }
+
+        previosX = x;
+        previosY = y;
+
+        x += errorX;
+        y += errorY;
+      }
+
+      currentTime++;
 
       if (!deegres[preferred]->isIncludedEx(gyro))
       {
+        previosIgnoreTime = currentTime + ignoreTime;
+        
         for (int i = 0; i < 4; i++)
         {
           if (deegres[i]->isIncluded(gyro))

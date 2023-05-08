@@ -17,8 +17,6 @@ Navigation navigation;
 
 router Router(&navigation);
 
-bool isEnable = false;
-
 void setup() {
   Serial.begin(9600);
 

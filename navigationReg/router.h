@@ -66,13 +66,13 @@ class router
       //route.Enqueu(new point(30, 5));
 
       // 4 задание
-      //route.Enqueu(new point(146, 192));
-      //route.Enqueu(new circles(79, 192, 66, 0, 180));
-      //route.Enqueu(new point(146, 83));
-      //route.Enqueu(new circles(79, 83, 61, 0, -180));
-      //route.Enqueu(new point(146, 192));
-      //route.Enqueu(new circles(79, 192, 66, 0, 180));
-      //route.Enqueu(new point(30, 5));
+      route.Enqueu(new point(146, 192));
+      route.Enqueu(new circles(79, 192, 66, 0, 180));
+      route.Enqueu(new point(146, 83));
+      route.Enqueu(new circles(79, 83, 61, 0, -180));
+      route.Enqueu(new point(146, 192));
+      route.Enqueu(new circles(79, 192, 66, 0, 180));
+      route.Enqueu(new point(30, 5));
 
       motor.SetSpeed(StartSpeed);
 

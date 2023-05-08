@@ -23,3 +23,5 @@ void WriteInt(int val)
   Serial.write((byte)(val >> 8));
   Serial.write((byte)val);
 }
+
+bool isEnable = false;
