@@ -3,7 +3,7 @@ class Navigation
     sector* deegres[4] {new sector0(0, yPlus, xPlus), new sector(90, xPlus, yMinus), new sector(180, yMinus, xMinus), new sector(270, xMinus, yPlus)};
 
     int preferred, maxX, compass, minX, maxY, minY, centerX, centerY, x, y, h, l, gyro, gyroSpeed, distance1, distance2,
-        pool = 0, errorX = 0, errorY = 0, previosX = 0, previosY = 0;
+        pool = 0, errorX = 0, errorY = 0, previosX = 0, previosY = 0, counterBuoys = 0;
 
     unsigned long previosIgnoreTime = 0, currentTime = 0;
 
@@ -69,6 +69,8 @@ class Navigation
   public:
     const int SaveBaseData = 0;
 
+    void (* ReRoute)(int xb, int yb, int numberBuoy);
+
     byte buf[6];
 
     void Init()
@@ -119,7 +121,7 @@ class Navigation
     }
 
     void UpdateDist()
-    { 
+    {
       tflI2C.getData(distance1, Addr2);
       tflI2C.getData(distance2, Addr1);
 
@@ -145,6 +147,15 @@ class Navigation
             {
               errorX = differenceX;
               isSeeBuoyX = true;
+
+              if (counterBuoys < quantityBuoys)
+              {
+                digitalWrite(buzzer, HIGH);
+
+                counterBuoys++;
+
+                if (this->ReRoute != NULL) this->ReRoute(0, y, counterBuoys);
+              }
             }
           }
 
@@ -175,7 +186,7 @@ class Navigation
       if (!deegres[preferred]->isIncludedEx(gyro))
       {
         previosIgnoreTime = currentTime + ignoreTime;
-        
+
         for (int i = 0; i < 4; i++)
         {
           if (deegres[i]->isIncluded(gyro))

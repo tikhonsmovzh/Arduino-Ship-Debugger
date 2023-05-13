@@ -11,7 +11,7 @@ const int timeGyro = 20;
 
 const int key = 4;
 
-unsigned long tim = 0, gyroTim = 0, nowMil = 0;
+unsigned long tim = 0, gyroTim = 0, currentMil = 0;
 
 Navigation navigation;
 
@@ -23,36 +23,39 @@ void setup() {
   Wire.begin();
 
   pinMode(key, INPUT);
+  pinMode(buzzer, OUTPUT);
 
-  navigation.Init();
   Router.Init();
+  navigation.Init();
+
+  navigation.ReRoute = RouterReRoute;
 }
 
 void loop() {
-  nowMil = millis();
+  currentMil = millis();
 
-  if (gyroTim < nowMil)
+  if (gyroTim < currentMil)
   {
-    gyroTim = nowMil + timeGyro;
+    gyroTim = currentMil + timeGyro;
 
     navigation.GyroUpdate();
+
+    currentMil = millis();
   }
 
-  if (tim < nowMil)
+  if (tim < currentMil)
   {
-    digitalWrite(Router.buzzer, LOW);
+    tim = currentMil + timeDist;
 
-    tim = nowMil + timeDist;
+    digitalWrite(buzzer, LOW);
 
     navigation.UpdateDist();
-
-    bool nowKey = digitalRead(key);
 
     if (isEnable)
       Router.Update();
   }
 
-  if(digitalRead(key) && !isEnable)
+  if (digitalRead(key) && !isEnable)
   {
     isEnable = true;
 
@@ -107,4 +110,8 @@ void loop() {
         break;
     }
   }
+}
+
+void RouterReRoute(int xb, int yb, int numberBuoy) {
+  Router.ReRoute(xb, yb, numberBuoy);
 }

@@ -5,7 +5,7 @@ class circles: public leg
     const int steps = 20;
 
   public:
-    circles(int x, int y, int radius, int starts, int rot)
+    circles(int x, int y, int radius, int starts, int rot, int attachment = 0) : leg(attachment)
     {
       this->y = y;
       this->x = x;
@@ -15,13 +15,27 @@ class circles: public leg
       rotation = rot;
     }
 
-    int GetX() {return potentialX;}
+    int GetX() {
+      return potentialX;
+    }
+    int GetY() {
+      return potentialY;
+    }
 
-    int GetY() {return potentialY;}
+    bool GetAccurate() {
+      return false;
+    }
 
-    bool GetAccurate() {return false;}
+    void SetX(int val) {
+      x = val;
+    }
+    void SetY(int val) {
+      y = val;
+    }
 
-    bool isComplite(){return !(rotation > 0 ? alpha <= End : alpha >= End);}
+    bool isComplite() {
+      return !(rotation > 0 ? alpha <= End : alpha >= End);
+    }
 
     void Update(Navigation *navigation)
     {

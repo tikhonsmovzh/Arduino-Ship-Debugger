@@ -36,14 +36,14 @@ class Motor
     void SetSpeed(int speeds)
     {
       workSpeed = speeds;
-      
+
       if (speeds == 0)
       {
         digitalWrite(shimMotor, LOW);
         return;
       }
 
-      if(abs(speeds) == 255)
+      if (abs(speeds) == 255)
         digitalWrite(shimMotor, HIGH);
       else
         analogWrite(shimMotor, abs(speeds));
@@ -62,7 +62,7 @@ class Motor
 
     void SetAccurateSpeed(int speeds)
     {
-      if (abs(speeds - workSpeed) > sensitivity) 
+      if (abs(speeds - workSpeed) > sensitivity)
         SetSpeed(speeds);
     }
 
@@ -70,11 +70,11 @@ class Motor
       return workSpeed;
     }
 
-    void RearRotate(int deegre){
+    void RearRotate(int deegre) {
       servoRotate(deegre, &servoRear);
     }
 
-    void ForvardRotate(int deegre){
+    void ForvardRotate(int deegre) {
       servoRotate(deegre, &servoForvard);
     }
 };

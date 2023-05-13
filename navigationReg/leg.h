@@ -1,16 +1,33 @@
 class leg
 {
+    int attachment;
+
   public:
-  leg *Next = NULL;
-  
-  virtual void Update(Navigation *navigation) {}
+    leg *Next = NULL;
 
-  virtual long GetDistance(){return 0;}
+    leg(int attachment) {
+      this->attachment = attachment;
+    }
 
-  virtual int GetX() = 0;
-  virtual int GetY() = 0;
+    virtual void Update(Navigation *navigation) {}
 
-  virtual bool GetAccurate() {return true;}
+    virtual long GetDistance() {
+      return 0;
+    }
 
-  virtual bool isComplite() = 0;
+    virtual int GetX() = 0;
+    virtual int GetY() = 0;
+
+    virtual void SetX(int val) {}
+    virtual void SetY(int val) {}
+
+    virtual bool GetAccurate() {
+      return true;
+    }
+
+    int GetAttachment() {
+      return attachment;
+    }
+
+    virtual bool isComplite() = 0;
 };

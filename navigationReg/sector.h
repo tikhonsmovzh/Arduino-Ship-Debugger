@@ -1,5 +1,3 @@
-enum Dist { xPlus, yPlus, xMinus, yMinus };
-
 class sector
 {
     Dist dist[2];

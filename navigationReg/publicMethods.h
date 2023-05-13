@@ -1,3 +1,21 @@
+class Vector2
+{
+    int x, y;
+  public:
+    Vector2(int x = 0, int y = 0)
+    {
+      this->x = x;
+      this->y = y;
+    }
+
+    int GetX() {
+      return x;
+    }
+    int GetY() {
+      return y;
+    }
+};
+
 int sign(int val) {
   if (val < 0) return -1;
   if (val == 0) return 0;
@@ -25,3 +43,8 @@ void WriteInt(int val)
 }
 
 bool isEnable = false;
+
+const int buzzer = 13;
+const int quantityBuoys = 1;
+
+enum Dist { xPlus, yPlus, xMinus, yMinus };

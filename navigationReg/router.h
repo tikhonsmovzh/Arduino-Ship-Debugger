@@ -26,9 +26,9 @@ class router
       motor.ForvardRotate(-deegre);
     }
 
-  public:
-    const int buzzer = 13;
+    Vector2 buoys [quantityBuoys] {Vector2(500, 500)};
 
+  public:  
     router(Navigation *navigation)
     {
       this->navigation = navigation;
@@ -39,8 +39,6 @@ class router
     void Init()
     {
       motor.Init();
-
-      pinMode(buzzer, OUTPUT);
     }
 
     void Start()
@@ -79,11 +77,6 @@ class router
       current = route.Dequeue();
     }
 
-    void End()
-    {
-      motor.SetSpeed(0);
-    }
-
     void Update()
     {
       if (current == NULL)
@@ -97,7 +90,7 @@ class router
       }
 
       current->Update(navigation);
-      
+
       if (current->isComplite())
       {
         current = route.Dequeue();
@@ -134,5 +127,26 @@ class router
 
       if (abs(rot) < 90)
         sumError += deegre;
+    }
+
+    void ReRoute(int xb, int yb, int numberBuoy)
+    {
+      if (numberBuoy >= quantityBuoys)
+        return;
+
+      route.CurrentToFirst();
+
+      while (!route.IsCurrentLast())
+      {
+        leg* cur = route.GetCurrent();
+
+        if (cur->GetAttachment() == numberBuoy)
+        {
+          cur->SetX(xb + (buoys[numberBuoy].GetX() - cur->GetX()));
+          cur->SetY(yb + (buoys[numberBuoy].GetY() - cur->GetY()));
+        }
+
+        route.StepForward();
+      }
     }
 };

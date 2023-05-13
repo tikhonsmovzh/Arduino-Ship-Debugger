@@ -1,6 +1,6 @@
 class DynamicStructure
 {
-    leg *first, *last;
+    leg *first, *last, *current;
 
   public:
     leg* Dequeue()
@@ -33,9 +33,25 @@ class DynamicStructure
       last = data;
     }
 
+    leg* GetCurrent() {
+      return current;
+    }
+
     void Clear()
     {
       first = NULL;
       last = NULL;
+    }
+
+    bool IsCurrentLast() {
+      return current == NULL;
+    }
+
+    void StepForward() {
+      current = current->Next;
+    }
+
+    void CurrentToFirst() {
+      current = first;
     }
 };

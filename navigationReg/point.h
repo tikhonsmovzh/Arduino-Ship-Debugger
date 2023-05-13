@@ -5,17 +5,29 @@ class point : public leg
     const long maxDistances = 20;
 
   public:
-    point(int x = 0, int y = 0)
+    point(int x = 0, int y = 0, int attachment = 0) : leg(attachment)
     {
       this->y = y;
       this->x = x;
     }
 
-    int GetX(){return x;}
+    int GetX() {
+      return x;
+    }
+    int GetY() {
+      return y;
+    }
 
-    int GetY(){return y;}
+    void SetX(int val) {
+      x = val;
+    }
+    void SetY(int val) {
+      y = val;
+    }
 
-    long GetDistance(){return distance;}
+    long GetDistance() {
+      return distance;
+    }
 
     bool isComplite()
     {
