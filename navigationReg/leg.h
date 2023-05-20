@@ -18,6 +18,9 @@ class leg
     virtual int GetX() = 0;
     virtual int GetY() = 0;
 
+    virtual int centerX() = 0;
+    virtual int centerY() = 0;
+
     virtual void SetX(int val) {}
     virtual void SetY(int val) {}
 

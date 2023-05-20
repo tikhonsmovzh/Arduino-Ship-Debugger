@@ -3,7 +3,7 @@ class circles: public leg
     int x, y, radius, Start, End, alpha, rotation, potentialX, potentialY;
 
     const int steps = 30;
-    const float ellipseCoef = 0.5;
+    const float ellipseCoef = 1;
 
   public:
     circles(int x, int y, int radius, int starts, int rot, int attachment = 0) : leg(attachment)
@@ -21,6 +21,13 @@ class circles: public leg
     }
     int GetY() {
       return potentialY;
+    }
+
+    int centerX() {
+      return x;
+    }
+    int centerY() {
+      return y;
     }
 
     bool GetAccurate() {

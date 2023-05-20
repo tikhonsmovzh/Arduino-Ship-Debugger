@@ -73,8 +73,8 @@ class router
       //route.Enqueu(new point(30, 5));
 
       // 3 задание с учётом
-      route.Enqueu(new point(30, 192));
-      route.Enqueu(new circles(96, 192, 50, 175, -180));
+      route.Enqueu(new point(30, 200, 1));
+      route.Enqueu(new circles(96, 200, 50, 175, -180, 1));
       route.Enqueu(new point(146, 5));
 
       motor.SetSpeed(StartSpeed);
@@ -135,10 +135,7 @@ class router
     }
 
     void ReRoute(int xb, int yb, int numberBuoy)
-    {
-      if (numberBuoy > quantityBuoys)
-        return;
-
+    { 
       //motor.SetSpeed(0);
 
       route.CurrentToFirst();
@@ -148,10 +145,7 @@ class router
         leg* cur = route.GetCurrent();
 
         if (cur->GetAttachment() == numberBuoy)
-        {
-          cur->SetX(buoys[numberBuoy - 1].GetX() - xb + current->GetX());
-          cur->SetY(buoys[numberBuoy - 1].GetY() - yb + current->GetY());
-        }
+          changeLeg(xb, yb, numberBuoy, cur);
 
         route.StepForward();
       }
@@ -161,8 +155,23 @@ class router
 
       if (current->GetAttachment() == numberBuoy)
       {
-        current->SetX(buoys[numberBuoy - 1].GetX() - xb + current->GetX());
-        current->SetY(buoys[numberBuoy - 1].GetY() - yb + current->GetY());
+        changeLeg(xb, yb, numberBuoy, current);
+
+        /*Serial.print("Xb = ");
+        Serial.print(xb);
+        Serial.print(" Yb = ");
+        Serial.println(yb);
+
+        Serial.print("current leg x = ");
+        Serial.print(current->GetX());
+        Serial.print(" current leg y = ");
+        Serial.println(current->GetY());*/
       }
+    }
+
+    void changeLeg(int xb, int yb, int numberBuoy, leg* cur)
+    {
+      cur->SetX(cur->centerX() - buoys[numberBuoy - 1].GetX() + xb);
+      cur->SetY(cur->centerY() - buoys[numberBuoy - 1].GetY() + yb);
     }
 };

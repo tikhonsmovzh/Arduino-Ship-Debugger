@@ -18,6 +18,13 @@ class point : public leg
       return y;
     }
 
+    int centerX() {
+      return x;
+    }
+    int centerY() {
+      return y;
+    }
+
     void SetX(int val) {
       x = val;
     }

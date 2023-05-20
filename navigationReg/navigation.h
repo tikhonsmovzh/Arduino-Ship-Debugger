@@ -3,7 +3,7 @@ class Navigation
     sector* deegres[4] {new sector0(0, yPlus, xPlus), new sector(90, xPlus, yMinus), new sector(180, yMinus, xMinus), new sector(270, xMinus, yPlus)};
 
     int preferred, maxX, compass, minX, maxY, minY, centerX, centerY, x, y, h, l, gyro, gyroSpeed, distance1, distance2,
-        pool = 0, errorX = 0, errorY = 0, previosX = 0, previosY = 0, counterBuoys = 0;
+        pool = 0, previosX = 0, previosY = 0, counterBuoys = 0;
 
     unsigned long previosIgnoreTime = 0, currentTime = 0;
 
@@ -21,7 +21,7 @@ class Navigation
     const int Addr1 = 0x11;
     const int Addr2 = TFL_DEF_ADR;
 
-    const int sensitivity = 60;
+    const int sensitivity = 3600;
 
     const int GyroError = 379;
 
@@ -100,6 +100,9 @@ class Navigation
 
       previosX = deegres[preferred]->GetX(distance1, distance2, l, h);
       previosY = deegres[preferred]->GetY(distance1, distance2, l, h);
+
+      x = previosX;
+      y = previosY;
     }
 
     void SaveCompass()
@@ -129,57 +132,33 @@ class Navigation
 
       if (currentTime >= previosIgnoreTime)
       {
-        x = deegres[preferred]->GetX(distance1, distance2, l, h);
-        y = deegres[preferred]->GetY(distance1, distance2, l, h);
+        int currentX = deegres[preferred]->GetX(distance1, distance2, l, h);
+        int currentY = deegres[preferred]->GetY(distance1, distance2, l, h);
 
         if (isEnable)
         {
-          int differenceX = x - previosX, differenceY = y - previosY;
+          Vector2 leg(previosX - currentX, previosY - currentY);
 
-          if (abs(differenceX) > sensitivity)
+          if (leg.GetX() * leg.GetX() + leg.GetY() * leg.GetY() < sensitivity)
           {
-            if (isSeeBuoyX)
-            {
-              errorX = 0;
-              isSeeBuoyX = false;
-            }
-            else
-            {
-              errorX = differenceX;
-              isSeeBuoyX = true;
+            previosX = currentX;
+            previosY = currentY;
 
-              if (counterBuoys < quantityBuoys)
-              {
-                digitalWrite(buzzer, HIGH);
-
-                counterBuoys++;
-
-                if (ReRoute != NULL) ReRoute(h - previosX, y, counterBuoys);
-              }
-            }
-            
+            x = currentX;
+            y = currentY;
           }
-
-          if (abs(differenceY) > sensitivity)
+          else
           {
-            if (isSeeBuoyY)
+            if (counterBuoys < quantityBuoys)
             {
-              errorY = 0;
-              isSeeBuoyY = false;
-            }
-            else
-            {
-              errorY = differenceY;
-              isSeeBuoyY = true;
+              digitalWrite(buzzer, HIGH);
+
+              counterBuoys++;
+
+              if (ReRoute != NULL) ReRoute(h - (currentX - previosX), y, counterBuoys);
             }
           }
         }
-
-        previosX = x;
-        previosY = y;
-
-        x += errorX;
-        y += errorY;
       }
 
       currentTime++;
