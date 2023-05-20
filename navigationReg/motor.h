@@ -1,8 +1,8 @@
 class Motor
 {
     const int shimMotor = 5;
-    const int powerMotor1 = 6;
-    const int powerMotor2 = 8;
+    const int powerMotor1 = 8;
+    const int powerMotor2 = 6;
 
     const int sensitivity = 5;
 

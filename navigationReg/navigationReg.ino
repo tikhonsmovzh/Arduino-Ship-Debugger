@@ -6,7 +6,7 @@ const byte saveP = 2;
 const byte ZeroingGyroP = 3;
 const byte distFixationP = 4;
 
-const int timeDist = 100;
+const int timeDist = 50;
 const int timeGyro = 20;
 
 const int key = 4;
@@ -16,6 +16,10 @@ unsigned long tim = 0, gyroTim = 0, currentMil = 0;
 Navigation navigation;
 
 router Router(&navigation);
+
+void RouterReRoute(int xb, int yb, int numberBuoy) {
+  Router.ReRoute(xb, yb, numberBuoy);
+}
 
 void setup() {
   Serial.begin(9600);
@@ -110,8 +114,4 @@ void loop() {
         break;
     }
   }
-}
-
-void RouterReRoute(int xb, int yb, int numberBuoy) {
-  Router.ReRoute(xb, yb, numberBuoy);
 }
