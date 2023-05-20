@@ -2,7 +2,8 @@ class circles: public leg
 {
     int x, y, radius, Start, End, alpha, rotation, potentialX, potentialY;
 
-    const int steps = 20;
+    const int steps = 30;
+    const float ellipseCoef = 0.5;
 
   public:
     circles(int x, int y, int radius, int starts, int rot, int attachment = 0) : leg(attachment)
@@ -41,11 +42,14 @@ class circles: public leg
     {
       alpha = atan2(navigation->GetY() - y, navigation->GetX() - x) * 180 / PI;
 
+      if (alpha < -90)
+        alpha += 360;
+
       alpha += rotation > 0 ? steps : -steps;
 
       double radAlpha = (double)alpha * PI / 180;
 
       potentialX = x + radius * cos(radAlpha);
-      potentialY = y + radius * sin(radAlpha);
+      potentialY = y + radius * ellipseCoef * sin(radAlpha);
     }
 };

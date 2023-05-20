@@ -1,7 +1,7 @@
 class router
 {
-    const float lineCoef = 3;
-    const float integrateCoef = 0.01;
+    const float lineCoef = 1;
+    const float integrateCoef = 0.02;
 
     DynamicStructure route;
 
@@ -26,9 +26,9 @@ class router
       motor.ForvardRotate(-deegre);
     }
 
-    Vector2 buoys [quantityBuoys] {Vector2(500, 500)};
+    Vector2 buoys [quantityBuoys] {Vector2(79, 192)};
 
-  public:  
+  public:
     router(Navigation *navigation)
     {
       this->navigation = navigation;
@@ -64,13 +64,18 @@ class router
       //route.Enqueu(new point(30, 5));
 
       // 4 задание
-      route.Enqueu(new point(146, 192));
-      route.Enqueu(new circles(79, 192, 66, 0, 180));
-      route.Enqueu(new point(146, 83));
-      route.Enqueu(new circles(79, 83, 61, 0, -180));
-      route.Enqueu(new point(146, 192));
-      route.Enqueu(new circles(79, 192, 66, 0, 180));
-      route.Enqueu(new point(30, 5));
+      //route.Enqueu(new point(146, 192));
+      //route.Enqueu(new circles(79, 192, 66, 0, 180));
+      //route.Enqueu(new point(146, 83));
+      //route.Enqueu(new circles(79, 83, 61, 0, -180));
+      //route.Enqueu(new point(146, 192));
+      //route.Enqueu(new circles(79, 192, 66, 0, 180));
+      //route.Enqueu(new point(30, 5));
+
+      // 3 задание с учётом
+      route.Enqueu(new point(30, 192));
+      route.Enqueu(new circles(96, 192, 50, 175, -180));
+      route.Enqueu(new point(146, 5));
 
       motor.SetSpeed(StartSpeed);
 
@@ -131,8 +136,10 @@ class router
 
     void ReRoute(int xb, int yb, int numberBuoy)
     {
-      if (numberBuoy >= quantityBuoys)
+      if (numberBuoy > quantityBuoys)
         return;
+
+      //motor.SetSpeed(0);
 
       route.CurrentToFirst();
 
@@ -142,11 +149,20 @@ class router
 
         if (cur->GetAttachment() == numberBuoy)
         {
-          cur->SetX(xb + (buoys[numberBuoy].GetX() - cur->GetX()));
-          cur->SetY(yb + (buoys[numberBuoy].GetY() - cur->GetY()));
+          cur->SetX(buoys[numberBuoy - 1].GetX() - xb + current->GetX());
+          cur->SetY(buoys[numberBuoy - 1].GetY() - yb + current->GetY());
         }
 
         route.StepForward();
+      }
+
+      if (current == NULL)
+        return;
+
+      if (current->GetAttachment() == numberBuoy)
+      {
+        current->SetX(buoys[numberBuoy - 1].GetX() - xb + current->GetX());
+        current->SetY(buoys[numberBuoy - 1].GetY() - yb + current->GetY());
       }
     }
 };

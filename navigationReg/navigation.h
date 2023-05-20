@@ -21,11 +21,11 @@ class Navigation
     const int Addr1 = 0x11;
     const int Addr2 = TFL_DEF_ADR;
 
-    const int sensitivity = 50;
+    const int sensitivity = 60;
 
     const int GyroError = 379;
 
-    const int ignoreTime = 1;
+    const int ignoreTime = 2;
 
     TFLI2C tflI2C;
 
@@ -134,7 +134,7 @@ class Navigation
 
         if (isEnable)
         {
-          int differenceX = previosX - x, differenceY = previosY - y;
+          int differenceX = x - previosX, differenceY = y - previosY;
 
           if (abs(differenceX) > sensitivity)
           {
@@ -154,9 +154,10 @@ class Navigation
 
                 counterBuoys++;
 
-                if (this->ReRoute != NULL) this->ReRoute(0, y, counterBuoys);
+                if (ReRoute != NULL) ReRoute(h - previosX, y, counterBuoys);
               }
             }
+            
           }
 
           if (abs(differenceY) > sensitivity)
