@@ -64,6 +64,7 @@ void loop() {
     isEnable = true;
 
     Router.Start();
+    navigation.Start();
   }
 
   if (Serial.available() > 0)

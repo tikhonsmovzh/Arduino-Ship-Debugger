@@ -1,11 +1,11 @@
 class router
 {
     const float lineCoef = 1;
-    const float integrateCoef = 0.02;
+    const float integrateCoef = 0;
 
     DynamicStructure route;
 
-    leg *current;
+    leg *targetLeg;
 
     const long loverDistance = 200;
 
@@ -33,7 +33,7 @@ class router
     {
       this->navigation = navigation;
 
-      current = NULL;
+      targetLeg = NULL;
     }
 
     void Init()
@@ -74,37 +74,37 @@ class router
 
       // 3 задание с учётом
       route.Enqueu(new point(30, 200, 1));
-      route.Enqueu(new circles(96, 200, 50, 175, -180, 1));
+      route.Enqueu(new circles(96, 200, 50, 150, -120, 1));
       route.Enqueu(new point(146, 5));
 
       motor.SetSpeed(StartSpeed);
 
-      current = route.Dequeue();
+      targetLeg = route.Dequeue();
     }
 
     void Update()
     {
-      if (current == NULL)
+      if (targetLeg == NULL)
       {
-        current = route.Dequeue();
+        targetLeg = route.Dequeue();
 
-        if (current != NULL)
+        if (targetLeg != NULL)
           motor.SetSpeed(StartSpeed);
 
         return;
       }
 
-      current->Update(navigation);
+      targetLeg->Update(navigation);
 
-      if (current->isComplite())
+      if (targetLeg->isComplite())
       {
-        current = route.Dequeue();
+        targetLeg = route.Dequeue();
 
         digitalWrite(buzzer, HIGH);
 
         sumError = 0;
 
-        if (current == NULL)
+        if (targetLeg == NULL)
         {
           motor.SetSpeed(0);
 
@@ -114,15 +114,15 @@ class router
         motor.SetSpeed(StartSpeed);
       }
 
-      if (current->GetDistance() < loverDistance && isAccurate && current->GetAccurate())
+      if (targetLeg->GetDistance() < loverDistance && isAccurate && targetLeg->GetAccurate())
       {
-        int speeds = StartSpeed * (float)current->GetDistance() / (float)loverDistance;
+        int speeds = StartSpeed * (float)targetLeg->GetDistance() / (float)loverDistance;
 
         if (speeds > minSpeed)
           motor.SetAccurateSpeed(speeds);
       }
 
-      int deegre = navigation->GetErorr(-(atan2(navigation->GetY() - current->GetY(), navigation->GetX() - current->GetX()) * 180 / PI) - 90);
+      int deegre = navigation->GetErorr(-(atan2(navigation->GetY() - targetLeg->GetY(), navigation->GetX() - targetLeg->GetX()) * 180 / PI) - 90);
       int rot = deegre * lineCoef + sumError * integrateCoef;
 
       if (motor.GetSpeed() >= 0)
@@ -136,8 +136,6 @@ class router
 
     void ReRoute(int xb, int yb, int numberBuoy)
     { 
-      //motor.SetSpeed(0);
-
       route.CurrentToFirst();
 
       while (!route.IsCurrentLast())
@@ -150,23 +148,11 @@ class router
         route.StepForward();
       }
 
-      if (current == NULL)
+      if (targetLeg == NULL)
         return;
 
-      if (current->GetAttachment() == numberBuoy)
-      {
-        changeLeg(xb, yb, numberBuoy, current);
-
-        /*Serial.print("Xb = ");
-        Serial.print(xb);
-        Serial.print(" Yb = ");
-        Serial.println(yb);
-
-        Serial.print("current leg x = ");
-        Serial.print(current->GetX());
-        Serial.print(" current leg y = ");
-        Serial.println(current->GetY());*/
-      }
+      if (targetLeg->GetAttachment() == numberBuoy)
+        changeLeg(xb, yb, numberBuoy, targetLeg);
     }
 
     void changeLeg(int xb, int yb, int numberBuoy, leg* cur)

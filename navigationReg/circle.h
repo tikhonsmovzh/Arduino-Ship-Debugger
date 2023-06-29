@@ -54,6 +54,11 @@ class circles: public leg
 
       alpha += rotation > 0 ? steps : -steps;
 
+      //Serial.print("alpha = ");
+      //Serial.println(alpha);
+      //Serial.print("End = ");
+      //Serial.println(End);
+
       double radAlpha = (double)alpha * PI / 180;
 
       potentialX = x + radius * cos(radAlpha);

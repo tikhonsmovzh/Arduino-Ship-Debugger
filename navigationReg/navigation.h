@@ -5,11 +5,9 @@ class Navigation
     int preferred, maxX, compass, minX, maxY, minY, centerX, centerY, x, y, h, l, gyro, gyroSpeed, distance1, distance2,
         pool = 0, previosX = 0, previosY = 0, counterBuoys = 0;
 
-    unsigned long previosIgnoreTime = 0, currentTime = 0;
+    unsigned long previosIgnoreTime = 0, currentTime = 0, previosBuoyIgnoreTime = 0;
 
     double rot = 0;
-
-    bool isSeeBuoyX = false, isSeeBuoyY = false;
 
     unsigned long int timer = 0;
 
@@ -26,6 +24,7 @@ class Navigation
     const int GyroError = 379;
 
     const int ignoreTime = 2;
+    const int buoyIgnoreTime = 4;
 
     TFLI2C tflI2C;
 
@@ -33,7 +32,7 @@ class Navigation
 
     Servo servo;
 
-    int GetValue()
+    int GetCompaseValue()
     {
       Wire.beginTransmission(addr);
       Wire.write(0x03);
@@ -95,14 +94,7 @@ class Navigation
       EEPROM.get(SaveBaseData + 10, l);
       EEPROM.get(SaveBaseData + 12, h);
 
-      tflI2C.getData(distance1, Addr2);
-      tflI2C.getData(distance2, Addr1);
-
-      previosX = deegres[preferred]->GetX(distance1, distance2, l, h);
-      previosY = deegres[preferred]->GetY(distance1, distance2, l, h);
-
-      x = previosX;
-      y = previosY;
+      Start();
     }
 
     void SaveCompass()
@@ -128,7 +120,7 @@ class Navigation
       tflI2C.getData(distance1, Addr2);
       tflI2C.getData(distance2, Addr1);
 
-      compass = GetValue();
+      compass = GetCompaseValue();
 
       if (currentTime >= previosIgnoreTime)
       {
@@ -232,6 +224,18 @@ class Navigation
     {
       rot = compass;
       gyro = compass;
+    }
+
+    void Start()
+    {
+      tflI2C.getData(distance1, Addr2);
+      tflI2C.getData(distance2, Addr1);
+
+      previosX = deegres[preferred]->GetX(distance1, distance2, l, h);
+      previosY = deegres[preferred]->GetY(distance1, distance2, l, h);
+
+      x = previosX;
+      y = previosY;
     }
 
     int GetX() {
