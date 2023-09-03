@@ -45,6 +45,6 @@ void WriteInt(int val)
 bool isEnable = false;
 
 const int buzzer = 13;
-const int quantityBuoys = 1;
+const int quantityBuoys = 0;
 
 enum Dist { xPlus, yPlus, xMinus, yMinus };

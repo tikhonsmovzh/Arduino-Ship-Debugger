@@ -26,7 +26,7 @@ class router
       motor.ForvardRotate(-deegre);
     }
 
-    Vector2 buoys [quantityBuoys] {Vector2(79, 192)};
+    Vector2 buoys [quantityBuoys] {/*Vector2(79, 192)*/};
 
   public:
     router(Navigation *navigation)
@@ -52,11 +52,11 @@ class router
       //route.Enqueu(new point(85, 0));
 
       // 2 задание
-      //isAccurate = true;
-      //route.Enqueu(new point(10, 250));
-      //route.Enqueu(new point(135, 250));
-      //route.Enqueu(new point(150, 35));
-      //route.Enqueu(new point(10, 20));
+      isAccurate = true;
+      route.Enqueu(new point(135, 250));
+      route.Enqueu(new point(10, 250));
+      route.Enqueu(new point(10, 20));
+      route.Enqueu(new point(150, 35));
 
       // 3 задание
       //route.Enqueu(new point(146, 162));
@@ -73,9 +73,9 @@ class router
       //route.Enqueu(new point(30, 5));
 
       // 3 задание с учётом
-      route.Enqueu(new point(30, 200, 1));
-      route.Enqueu(new circles(96, 200, 50, 150, -120, 1));
-      route.Enqueu(new point(146, 5));
+      //route.Enqueu(new point(30, 200, 1));
+      //route.Enqueu(new circles(96, 200, 50, 150, -120, 1));
+      //route.Enqueu(new point(146, 5));
 
       motor.SetSpeed(StartSpeed);
 
@@ -135,7 +135,7 @@ class router
     }
 
     void ReRoute(int xb, int yb, int numberBuoy)
-    { 
+    {
       route.CurrentToFirst();
 
       while (!route.IsCurrentLast())
